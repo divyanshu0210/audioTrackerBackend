@@ -86,7 +86,18 @@ WSGI_APPLICATION = 'audiotracker.wsgi.application'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+# DATABASE_URL = os.environ.get("DATABASE_URL", "")
+# if DATABASE_URL.startswith("postgresql://"):
+#     DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgres://", 1)
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default=DATABASE_URL or "sqlite:///" + str(BASE_DIR / "db.sqlite3"),
+#         conn_max_age=600,
+#         ssl_require=True
+#     )
+# }
 
+DATABASE_URL = os.getenv("DATABASE_URL")
 if DATABASE_URL and DATABASE_URL.startswith("postgresql://"):
     DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgres://", 1)
 
