@@ -7,7 +7,9 @@ from .serializers import UserSerializer
 from .models import User, MentorshipRequest, Mentorship
 from .serializers import *
 
-NOTIFICATION_SERVER_URL = "http://10.11.26.220:1000/notifications/create/"
+# NOTIFICATION_SERVER_URL = "http://10.11.26.220:1000/notifications/create/"
+NOTIFICATION_SERVER_URL = "https://at-notif-backend0210.onrender.com/notifications/create/"
+
 
 @api_view(['POST'])
 def create_user(request):

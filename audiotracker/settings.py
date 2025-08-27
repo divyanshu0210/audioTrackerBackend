@@ -25,10 +25,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-9#(j977vkg0_2#tsdkuasu7f_*@!y*i9_5mcxlwn%y(z8-=l5*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "True") == "True"
 
 ALLOWED_HOSTS = ['10.11.27.210',"*" ]
 
+if not DEBUG:
+    ALLOWED_HOSTS = ["audiotrackerbackend.onrender.com"]
 
 # Application definition
 
@@ -80,30 +82,22 @@ WSGI_APPLICATION = 'audiotracker.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-# DATABASE_URL = os.environ.get("DATABASE_URL", "")
-# if DATABASE_URL.startswith("postgresql://"):
-#     DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgres://", 1)
-# DATABASES = {
-#     'default': dj_database_url.config(
-#         default=DATABASE_URL or "sqlite:///" + str(BASE_DIR / "db.sqlite3"),
-#         conn_max_age=600,
-#         ssl_require=True
-#     )
-# }
+if DEBUG:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
+else:
+    DATABASE_URL = os.getenv("DATABASE_URL")
+    if DATABASE_URL and DATABASE_URL.startswith("postgresql://"):
+        DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgres://", 1)
 
-DATABASE_URL = os.getenv("DATABASE_URL")
-if DATABASE_URL and DATABASE_URL.startswith("postgresql://"):
-    DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgres://", 1)
-
-DATABASES = {
-    'default': dj_database_url.config(default=DATABASE_URL)
-}
+    DATABASES = {
+        'default': dj_database_url.config(default=DATABASE_URL)
+    }
+    
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
