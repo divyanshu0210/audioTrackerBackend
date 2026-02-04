@@ -2,9 +2,10 @@ import firebase_admin
 from firebase_admin import credentials, messaging
 import os
 import json
+from decouple import config
 
 # Path to the service account key
-firebase_json = os.getenv("FIREBASE_SERVICE_ACCOUNT")
+firebase_json = config("FIREBASE_SERVICE_ACCOUNT")
 if not firebase_json:
     raise RuntimeError("FIREBASE_SERVICE_ACCOUNT env variable not set")
 
