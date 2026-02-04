@@ -1,13 +1,16 @@
 import firebase_admin
 from firebase_admin import credentials, messaging
 import os
+import json
 
 # Path to the service account key
-FIREBASE_CERT_PATH = os.path.join(os.path.dirname(__file__), "serviceAccountKey.json")
+firebase_json = os.getenv("FIREBASE_SERVICE_ACCOUNT")
+if not firebase_json:
+    raise RuntimeError("FIREBASE_SERVICE_ACCOUNT env variable not set")
 
 # Initialize only once
 if not firebase_admin._apps:
-    cred = credentials.Certificate(FIREBASE_CERT_PATH)
+    cred = credentials.Certificate(json.loads(firebase_json))
     firebase_admin.initialize_app(cred)
 
 def send_fcm_notification(token, title, body, data=None):
