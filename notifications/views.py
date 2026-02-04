@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -75,4 +76,9 @@ def mark_notifications_as_viewed(request):
 
     return Response({"message": "Notifications marked as viewed."}, status=status.HTTP_200_OK)
 
-    
+
+def keep_alive(request):
+    return JsonResponse({
+        "status": "ok",
+        "message": "server alive",
+    })
