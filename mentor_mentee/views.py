@@ -46,7 +46,8 @@ def check_email(request):
             'message': 'User exists',
             'user_id': user.id,
             'full_name': user.full_name,
-            'email': user.email
+            'email': user.email,
+            'photo_url': user.photo_url,
         }, status=200)
     except User.DoesNotExist:
         return Response({'error': 'User not found'}, status=404)

@@ -6,6 +6,7 @@ class User(models.Model):
     id = models.CharField(primary_key=True, max_length=100, unique=True)
     email = models.EmailField(unique=True)
     full_name = models.CharField(max_length=255)
+    photo_url = models.URLField(max_length=500, blank=True, default="")
 
     def __str__(self):
         return self.full_name
