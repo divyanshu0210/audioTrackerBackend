@@ -8,7 +8,7 @@ from mentor_mentee.models import Mentorship, User
 from collections import defaultdict
 from notifications.models import *
 from firebase.models import *
-from firebase.firebaseUtils.fcm import send_fcm_notification
+from notifications.utils import push_notification
 
 
 @api_view(['POST'])
@@ -73,15 +73,7 @@ def assign_videos_to_mentees(request):
             status='pending',
         )
 
-        tokens = DeviceToken.objects.filter(user=mentorship.mentee).values_list("token", flat=True)
-        print(tokens)
-        for token in tokens:
-            print('for loop running')
-            send_fcm_notification(
-                token=token,
-                title="New Video Assigned",
-                body=f"{mentor.email} assigned you a new video",
-            )
+        push_notification(notification, mentorship.mentee)
         # notification.status = 'sent'
         # notification.save()
 

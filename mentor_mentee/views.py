@@ -107,16 +107,7 @@ def send_mentorship_request(request):
             status='pending',
         )
     
-    notif_title = get_notification_title_by_type(request_type)
-    notif_body= get_notification_body(notification)
-
-    tokens = DeviceToken.objects.filter(user=receiver).values_list("token", flat=True)
-    for token in tokens:
-        send_fcm_notification(
-            token=token,
-            title=notif_title,
-            body=notif_body
-        )
+    push_notification(notification, receiver)
     # notification.status = 'sent'
     # notification.save()
 
@@ -153,16 +144,7 @@ def respond_mentorship_request(request):
             status='pending',
         )
     
-        notif_title = get_notification_title_by_type(req.status)
-        notif_body= get_notification_body(notification)
-
-        tokens = DeviceToken.objects.filter(user=req.sender).values_list("token", flat=True)
-        for token in tokens:
-            send_fcm_notification(
-                token=token,
-                title=notif_title,
-                body=notif_body
-            )
+        push_notification(notification, req.sender)
         # notification.status = 'sent'
         # notification.save()
 
@@ -188,16 +170,7 @@ def cancel_mentorship_request(request):
             status='pending',
         )
     
-        notif_title = get_notification_title_by_type("cancelled")
-        notif_body= get_notification_body(notification)
-
-        tokens = DeviceToken.objects.filter(user=req.receiver).values_list("token", flat=True)
-        for token in tokens:
-            send_fcm_notification(
-                token=token,
-                title=notif_title,
-                body=notif_body
-            )
+        push_notification(notification, req.receiver)
         # notification.status = 'sent'
         # notification.save()
 

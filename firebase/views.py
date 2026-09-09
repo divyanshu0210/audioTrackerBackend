@@ -20,5 +20,11 @@ def register_device_token(request):
     except User.DoesNotExist:
         return Response({"error": "User not found"}, status=404)
 
-    DeviceToken.objects.update_or_create(user=user, token=token)
+    # `token` is the unique column, so it has to be the lookup key and the user
+    # has to be a default. Looking up on (user, token) meant that re-registering
+    # a device under a second account found no row, tried to INSERT, and hit the
+    # unique constraint on `token` — a 500 that the app used to swallow, leaving
+    # the account with no reachable device. Keying on the token instead simply
+    # moves the device to whoever logged in last, which is what actually happened.
+    DeviceToken.objects.update_or_create(token=token, defaults={"user": user})
     return Response({"message": "Token registered successfully"})
